@@ -5,129 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0a0a0b" />
   <title>Крестики · Задачник</title>
-  <meta name="description" content="Тактические этюды по крестикам-ноликам. Один ход — победа или поражение." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230a0a0b'/%3E%3Cpath d='M30 30 L70 70 M70 30 L30 70' stroke='%236ee7b7' stroke-width='10' stroke-linecap='round'/%3E%3C/svg%3E" />
 </head>
 <body>
-  <div class="grain" aria-hidden="true"></div>
-
   <header class="top">
-    <a class="brand" href="./">
-      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-        <path d="M5 5 L19 19 M19 5 L5 19" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
-      </svg>
-      <span class="brand-text">Крестики <span class="brand-em">Задачник</span></span>
-    </a>
-    <nav class="tier-tabs" role="tablist" aria-label="Уровни сложности">
-      <button class="tier-tab" role="tab" data-tier="3x3" aria-selected="true">
-        <span class="tier-label">Classic</span>
-        <span class="tier-meta">3×3</span>
-      </button>
-      <button class="tier-tab" role="tab" data-tier="4x4" aria-selected="false">
-        <span class="tier-label">Wide</span>
-        <span class="tier-meta">4×4</span>
-      </button>
-      <button class="tier-tab" role="tab" data-tier="5x5" aria-selected="false">
-        <span class="tier-label">Master</span>
-        <span class="tier-meta">5×5</span>
-      </button>
+    <div class="brand">Крестики · <em>Задачник</em></div>
+    <nav class="tiers" aria-label="Размер доски">
+      <button class="tier" data-tier="3x3" aria-selected="true">3×3</button>
+      <button class="tier" data-tier="4x4" aria-selected="false">4×4</button>
+      <button class="tier" data-tier="5x5" aria-selected="false">5×5</button>
     </nav>
   </header>
 
   <main class="stage">
-    <article class="puzzle-card" id="card">
-      <header class="puzzle-head">
-        <div class="tag-row">
-          <span class="tag tag-pill" id="catTag">—</span>
-          <span class="diff" id="diffTag" aria-label="Сложность">
-            <span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span>
-          </span>
-        </div>
-        <h1 class="puzzle-title">
-          Ход <span class="x-glyph" aria-label="иксов">×</span> — найди выигрышный шаг
-        </h1>
-        <p class="puzzle-sub">Одна клетка приносит победу. Любая другая — проигрыш.</p>
-      </header>
+    <h1 class="title">Один ход — победа или поражение</h1>
+    <p class="sub">Ход за крестиками. Найди единственную клетку, после которой партия выиграна.</p>
 
-      <div class="board-frame">
-        <div class="coord-num" id="coordNum">№ 01</div>
-        <div class="board" id="board" role="grid" aria-label="Игровое поле"></div>
-        <svg class="overlay" id="overlay" aria-hidden="true"></svg>
-      </div>
+    <div class="board-wrap">
+      <div class="board" id="board" role="grid" aria-label="Игровое поле"></div>
+      <svg class="overlay" id="overlay" aria-hidden="true"></svg>
+    </div>
 
-      <div class="status-row">
-        <div class="status status-idle" id="status">
-          <span class="status-dot"></span>
-          <span class="status-text">Ваш ход</span>
-        </div>
-        <div class="hint-row">
-          <button class="ghost-btn" id="hintBtn" type="button">Подсказка</button>
-          <button class="ghost-btn" id="revealBtn" type="button">Показать ответ</button>
-        </div>
-      </div>
+    <div class="status status-idle" id="status">
+      <span class="dot"></span>
+      <span class="txt">Ваш ход</span>
+    </div>
 
-      <div class="explain" id="explain" hidden></div>
-
-      <div class="actions">
-        <button class="btn btn-primary" id="nextBtn" type="button" hidden>
-          Следующая
-          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button class="btn" id="retryBtn" type="button" hidden>Попробовать снова</button>
-      </div>
-    </article>
-
-    <aside class="rail" aria-label="Прогресс">
-      <section class="rail-card">
-        <h2 class="rail-title">Прогресс</h2>
-        <div class="progress-line">
-          <span class="progress-num"><b id="progressDone">0</b> <span class="muted">из <span id="progressTotal">0</span></span></span>
-          <span class="progress-pct" id="progressPct">0%</span>
-        </div>
-        <div class="bar"><div class="bar-fill" id="progressFill"></div></div>
-        <div class="stat-grid">
-          <div class="stat">
-            <div class="stat-val" id="statStreak">0</div>
-            <div class="stat-key">текущий стрик</div>
-          </div>
-          <div class="stat">
-            <div class="stat-val" id="statBest">0</div>
-            <div class="stat-key">лучший стрик</div>
-          </div>
-          <div class="stat">
-            <div class="stat-val" id="statFirst">0%</div>
-            <div class="stat-key">с первой попытки</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="rail-card legend">
-        <h2 class="rail-title">Типы задач</h2>
-        <ul>
-          <li><span class="legend-dot d-immediate"></span><span>Завершить линию</span></li>
-          <li><span class="legend-dot d-block"></span><span>Блок и атака</span></li>
-          <li><span class="legend-dot d-fork"></span><span>Вилка</span></li>
-          <li><span class="legend-dot d-trap"></span><span>Ловушка</span></li>
-        </ul>
-      </section>
-
-      <section class="rail-card how">
-        <h2 class="rail-title">Как играть</h2>
-        <p>Всегда ход за крестиками. Найдите единственную клетку, после которой партия выиграна с любой реакцией соперника. Ошибётесь — соперник доведёт партию до победы за один-два хода.</p>
-      </section>
-    </aside>
+    <div class="actions">
+      <button class="btn btn-primary" id="nextBtn" type="button" hidden>Следующая →</button>
+      <button class="btn" id="retryBtn" type="button" hidden>Ещё раз</button>
+    </div>
   </main>
 
-  <footer class="foot">
-    <span>Тактический этюдник на основе крестиков-ноликов</span>
-    <span class="muted">·</span>
-    <span class="muted">Решено <b id="footSolved">0</b> позиций</span>
-  </footer>
-
-  <script type="module" src="app.js"></script>
+  <script src="puzzles.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
