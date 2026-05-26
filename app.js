@@ -8,6 +8,14 @@
     if (!byTier[p.tier]) byTier[p.tier] = [];
     byTier[p.tier].push(p);
   }
+  // Перемешать каждый банк (Fisher-Yates) чтобы порядок был случайным.
+  for (const tier of Object.keys(byTier)) {
+    const arr = byTier[tier];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
 
   const state = {
     tier: '3x3',
